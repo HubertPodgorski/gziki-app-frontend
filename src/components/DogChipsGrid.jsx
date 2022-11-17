@@ -8,6 +8,7 @@ const DogChipsGrid = ({ children, sx = {} }) => {
   return (
     <Box
       sx={{
+        overflowX: "scroll",
         display: "grid",
         gridAutoFlow: "column",
         gridGap: theme.spacing(1),
