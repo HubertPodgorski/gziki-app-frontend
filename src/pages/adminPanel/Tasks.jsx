@@ -87,8 +87,6 @@ const Tasks = () => {
 
   const onFormClose = () => {
     handleFormClose();
-
-    // TODO: maybe if success reload data?
   };
 
   const onEditClick = async ({ position, description, dogs, _id }) => {
