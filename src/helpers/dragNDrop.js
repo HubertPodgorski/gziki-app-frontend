@@ -7,7 +7,7 @@ export const getNewAndOldPositionIndexes = (destination, source) => {
 
   const [oldRowIndexString, oldColumnIndexString] =
     source.droppableId.split("_");
-  const oldCellIndex = destination.index;
+  const oldCellIndex = source.index;
   const oldColumnIndex = +oldColumnIndexString;
   const oldRowIndex = +oldRowIndexString;
 
@@ -49,6 +49,7 @@ export const getMappedItemsToUpdate = (
   let itemsToUpdate = [];
 
   if (destination.droppableId === source.droppableId) {
+    newColumnTasks.splice(oldCellIndex, 1);
     newColumnTasks.splice(newCellIndex, 0, {
       _id: draggableId,
       position: {
@@ -58,7 +59,7 @@ export const getMappedItemsToUpdate = (
       },
     });
 
-    itemsToUpdate = [...newColumnTasks];
+    itemsToUpdate = newColumnTasks;
   } else {
     const oldColumnTasks = [...mappedTasks[oldRowIndex][oldColumnIndex]];
 

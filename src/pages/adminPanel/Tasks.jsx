@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { useGetMappedTasks } from "../../hooks/useGetMappedTasks";
 import {
   Box,
@@ -26,7 +26,7 @@ import DogChipsWrappable from "../../components/DogChipsWrappable";
 
 const Tasks = () => {
   const theme = useTheme();
-  const { events, tasks } = useContext(AppContext);
+  const { events, tasks, setTasks } = useContext(AppContext);
 
   const formMethods = useForm({
     defaultValues: { event: [] },
@@ -69,6 +69,18 @@ const Tasks = () => {
       mappedTasks,
       draggableId
     );
+
+    const updatedTasksListWithChanges = tasks.map((task) => {
+      const updatedTaskFound = mappedItemsToUpdate.find(
+        ({ _id: mappedTaskId }) => mappedTaskId === task._id
+      );
+
+      if (!updatedTaskFound) return task;
+
+      return { ...task, ...updatedTaskFound };
+    });
+
+    setTasks(updatedTasksListWithChanges);
 
     socket.emit("update_tasks_order", { tasks: mappedItemsToUpdate });
   };
