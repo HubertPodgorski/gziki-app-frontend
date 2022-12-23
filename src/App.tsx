@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { AppContextProvider } from "./contexts/AppContext";
