@@ -18,11 +18,13 @@ export interface Task {
 
   dogs: Dog[];
   description: string;
-  position: {
-    columnIndex: number;
-    rowIndex: number;
-    positionIndex: number;
-  };
+  position: Position;
+}
+
+export interface Position {
+  columnIndex: number;
+  rowIndex: number;
+  positionIndex: number;
 }
 
 export interface Dog {
