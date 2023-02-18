@@ -2,9 +2,12 @@ import React from "react";
 import { Card, Typography, useTheme } from "@mui/material";
 import { useIsMobile } from "../hooks/useIsMobile";
 import EventDetails from "./EventDetails";
-import { getFormattedDate } from "../helpers/calendar";
+import {
+  getBackgroundColorBasedOnType,
+  getFormattedDate,
+} from "../helpers/calendar";
 
-const EventCard = ({ event: { _id, name, date, dogs, users } }) => {
+const EventCard = ({ event: { _id, name, date, dogs, users, type } }) => {
   const isMobile = useIsMobile();
 
   const theme = useTheme();
@@ -17,7 +20,7 @@ const EventCard = ({ event: { _id, name, date, dogs, users } }) => {
         display: "grid",
         gridAutoFlow: "rows",
         gridGap: theme.spacing(2),
-
+        backgroundColor: getBackgroundColorBasedOnType(type),
         [theme.breakpoints.down("md")]: {
           padding: theme.spacing(1),
           gridGap: theme.spacing(1),
