@@ -12,10 +12,10 @@ import ChipsGrid from "./ChipsGrid";
 import ButtonsGrid from "./ButtonsGrid";
 import { AppContext } from "../contexts/AppContext";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { socket } from "./SocketHandler";
 import { useIsMobile } from "../hooks/useIsMobile";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { sortByAttendance } from "../helpers/calendar";
+import { useSocketContext } from "../hooks/useSocketContext";
 
 const EventDetails = ({ users, dogs, id }) => {
   const theme = useTheme();
@@ -24,6 +24,7 @@ const EventDetails = ({ users, dogs, id }) => {
 
   const { dogs: allDogs, users: allUsers } = useContext(AppContext);
   const { user } = useAuthContext();
+  const { socket } = useSocketContext();
 
   const isMobile = useIsMobile();
 

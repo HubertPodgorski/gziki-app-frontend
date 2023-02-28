@@ -4,9 +4,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import FormTextField from "../../components/inputs/FormTextField";
 import FormModal from "../../components/FormModal";
 import FormGrid from "../../components/FormGrid";
-import { socket } from "../../components/SocketHandler";
 
 const DogTaskForm = ({ open, onClose, initialData, editingId }) => {
+  const { socket } = useSocketContext();
+
   const formMethods = useForm({
     defaultValues: initialData,
   });
