@@ -3,7 +3,6 @@ import { Box, Chip } from "@mui/material";
 import ChipsGrid from "./ChipsGrid";
 import { DogWithAttendanceAndPlannedInfo } from "../helpers/types";
 import { getColorsByStatus, sortByAttendance } from "../helpers/calendar";
-import theme from "../helpers/theme";
 
 interface Props {
   dogsWithAttendance: DogWithAttendanceAndPlannedInfo[];
@@ -26,7 +25,7 @@ const DogAttendanceChips = ({ dogsWithAttendance, showIfPlanned }: Props) => {
             {showIfPlanned && !isPlanned && (
               <Box
                 sx={{
-                  background: theme.palette.warning.dark,
+                  background: "#fff",
                   width: "12px",
                   height: "12px",
                   borderRadius: "50%",
