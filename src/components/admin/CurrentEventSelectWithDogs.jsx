@@ -52,12 +52,14 @@ const CurrentEventSelectWithDogs = () => {
         ({ _id: currentEventDogId }) => currentEventDogId === dog._id
       );
 
-      if (!dogFound || !dogFound.status) return dog;
+      const isPlanned = isDogPlanned(dog._id);
+
+      if (!dogFound || !dogFound.status) return { ...dog, isPlanned };
 
       return {
         ...dog,
         status: dogFound.status,
-        isPlanned: isDogPlanned(dogFound._id),
+        isPlanned,
       };
     });
   }, [dogs, selectedEvent, events, isDogPlanned, selectedEventDogs]);
