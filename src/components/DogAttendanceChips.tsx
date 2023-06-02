@@ -21,7 +21,7 @@ const DogAttendanceChips = ({ dogsWithAttendance, showIfPlanned }: Props) => {
         const { color, background } = getColorsByStatus(status);
 
         return (
-          <Box sx={{ position: "relative" }}>
+          <Box sx={{ position: "relative" }} key={_id}>
             {showIfPlanned && !isPlanned && (
               <Box
                 sx={{
