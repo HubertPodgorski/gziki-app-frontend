@@ -19,6 +19,7 @@ const validTeamCodes = [
   "TEST",
   "DZIKIE_GZIKI_NABOR",
   "WEST_SIDE_DOGZ",
+  "FLYVENGERS",
 ];
 
 const SignupForm = () => {
