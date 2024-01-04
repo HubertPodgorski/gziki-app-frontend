@@ -2,18 +2,16 @@ import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
   adminPaths,
+  adminRoutes,
   notAuthenticatedRoutes,
   userPaths,
   userRoutes,
-  adminRoutes,
 } from "./helpers/routesAndPaths";
 import UserPanel from "./pages/userPanel/UserPanel";
 import AdminPanel from "./pages/adminPanel/AdminPanel";
 import Tasks from "./pages/userPanel/Tasks";
 import AdminTasks from "./pages/adminPanel/Tasks";
-import Notifications from "./pages/adminPanel/Notifications";
 import Calendar from "./pages/userPanel/Calendar";
-import Settings from "./pages/userPanel/Settings";
 import Users from "./pages/adminPanel/Users";
 import Dogs from "./pages/adminPanel/Dogs";
 import Events from "./pages/adminPanel/Events";
@@ -43,7 +41,6 @@ const Router = () => {
 
             <Route path={userPaths.tasks} element={<Tasks />} />
             <Route path={userPaths.calendar} element={<Calendar />} />
-            <Route path={userPaths.settings} element={<Settings />} />
           </Route>
 
           {isAdmin && (
@@ -55,10 +52,6 @@ const Router = () => {
               <Route path={adminPaths.dogTasks} element={<DogTasks />} />
               <Route path={adminPaths.dogs} element={<Dogs />} />
               <Route path={adminPaths.events} element={<Events />} />
-              <Route
-                path={adminPaths.notifications}
-                element={<Notifications />}
-              />
               <Route
                 path={adminPaths.eventTemplates}
                 element={<EventTemplates />}
