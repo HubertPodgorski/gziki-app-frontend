@@ -20,8 +20,6 @@ interface FormData {
 const NoteModal = ({ dog, open, onClose }: Props) => {
   const { socket } = useSocketContext();
 
-  console.log("dog => ", dog);
-
   const formMethods = useForm({
     defaultValues: { note: dog?.note || "" },
   });
@@ -37,7 +35,6 @@ const NoteModal = ({ dog, open, onClose }: Props) => {
   const onSubmit = async ({ note }) => {
     if (!dog) return;
 
-    console.log("note => ", note);
     await socket.emit("update_dog", { _id: dog._id, note }, () => onClose());
 
     // TODO: error handling eventually?
