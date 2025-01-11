@@ -4,6 +4,7 @@ import { AppContext } from "../contexts/AppContext";
 
 export const useGetMappedTasks = (adminPanel) => {
   const { tasks } = useContext(AppContext);
+  console.log("tasks => ", tasks);
 
   const [mappedTasks, setMappedTasks] = useState([]);
 
