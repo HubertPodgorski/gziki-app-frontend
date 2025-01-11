@@ -35,7 +35,9 @@ const NoteModal = ({ dog, open, onClose }: Props) => {
   const onSubmit = async ({ note }) => {
     if (!dog) return;
 
-    await socket.emit("update_dog", { _id: dog._id, note }, () => onClose());
+    await socket.emit("update_dog", { _id: dog._id, note: note || "" }, () =>
+      onClose()
+    );
 
     // TODO: error handling eventually?
   };
@@ -48,7 +50,7 @@ const NoteModal = ({ dog, open, onClose }: Props) => {
         title={`${dog?.name ?? "Dog"}'s notes`}
       >
         <FormGrid>
-          <FormTextField name="note" label="Notes" required rows={5} />
+          <FormTextField name="note" label="Notes" rows={5} />
 
           <DialogActions sx={{ padding: 0 }}>
             <Button size="medium" variant="outlined" onClick={onClose}>
