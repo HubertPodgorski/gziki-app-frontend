@@ -19,7 +19,7 @@ interface FormData {
   note: string;
 }
 
-const NoteModal = ({ dog, open, onClose }: Props) => {
+const NoteModal = ({ dog, open, onClose: handleOnClose }: Props) => {
   const { user } = useAuthContext();
   const { settings } = useContext(AppContext);
   const { socket } = useSocketContext();
@@ -36,35 +36,40 @@ const NoteModal = ({ dog, open, onClose }: Props) => {
     reset({ note: dog.note || "" });
   }, [dog, reset]);
 
+  const onClose = async () => {
+    await socket.emit("update_settings", { userUpdatingNotes: null });
+
+    handleOnClose();
+  };
+
   const onSubmit = async ({ note }) => {
     if (!dog) return;
 
     await socket.emit("update_dog", { _id: dog._id, note: note || "" }, () =>
-      onClose()
+      handleOnClose()
     );
-
-    await socket.emit("update_settings", { userUpdatingNotes: null });
 
     // TODO: error handling eventually?
   };
 
-  const onEditingStart = async () => {
-    if (!dog) return;
+  // Disabling this feature for now
+  // const onEditingStart = async () => {
+  //   if (!dog) return;
 
-    await socket.emit("update_settings", { userUpdatingNotes: user._id });
-  };
+  //   await socket.emit("update_settings", { userUpdatingNotes: user._id });
+  // };
 
-  const onEditingStop = async () => {
-    if (!dog) return;
+  // const onEditingStop = async () => {
+  //   if (!dog) return;
 
-    await socket.emit("update_settings", { userUpdatingNotes: null });
-  };
+  //   await socket.emit("update_settings", { userUpdatingNotes: null });
+  // };
 
-  const isAnotherUserEditing = useMemo(
-    () =>
-      settings?.userUpdatingNotes && user._id !== settings?.userUpdatingNotes,
-    [settings, user]
-  );
+  // const isAnotherUserEditing = useMemo(
+  //   () =>
+  //     settings?.userUpdatingNotes && user._id !== settings?.userUpdatingNotes,
+  //   [settings, user]
+  // );
 
   return (
     <FormProvider {...formMethods}>
@@ -78,12 +83,13 @@ const NoteModal = ({ dog, open, onClose }: Props) => {
             name="note"
             label="Notes"
             rows={5}
-            onFocus={onEditingStart}
-            onBlur={onEditingStop}
-            disabled={isAnotherUserEditing}
-            helperText={
-              isAnotherUserEditing ? "Another user updating notes" : undefined
-            }
+            // Disabling this feature for now
+            // onFocus={onEditingStart}
+            // onBlur={onEditingStop}
+            // disabled={isAnotherUserEditing}
+            // helperText={
+            //   isAnotherUserEditing ? "Another user updating notes" : undefined
+            // }
           />
 
           <DialogActions sx={{ padding: 0 }}>
