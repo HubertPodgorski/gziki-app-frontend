@@ -12,6 +12,7 @@ const FormTextField = ({
   onFocus,
   onBlur,
   helperText = "",
+  disabled = false,
 }) => {
   const { control } = useFormContext();
 
@@ -33,6 +34,7 @@ const FormTextField = ({
           helperText={helperText ?? error?.message ?? ""}
           multiline={rows > 1}
           rows={rows}
+          disabled={disabled}
         />
       )}
     />

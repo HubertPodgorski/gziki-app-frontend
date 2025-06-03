@@ -43,21 +43,21 @@ const NoteModal = ({ dog, open, onClose }: Props) => {
       onClose()
     );
 
-    socket.emit("update_settings", { userUpdatingNotes: null });
+    await socket.emit("update_settings", { userUpdatingNotes: null });
 
     // TODO: error handling eventually?
   };
 
-  const onEditingStart = () => {
+  const onEditingStart = async () => {
     if (!dog) return;
 
-    socket.emit("update_settings", { userUpdatingNotes: user._id });
+    await socket.emit("update_settings", { userUpdatingNotes: user._id });
   };
 
-  const onEditingStop = () => {
+  const onEditingStop = async () => {
     if (!dog) return;
 
-    socket.emit("update_settings", { userUpdatingNotes: null });
+    await socket.emit("update_settings", { userUpdatingNotes: null });
   };
 
   const isAnotherUserEditing = useMemo(
