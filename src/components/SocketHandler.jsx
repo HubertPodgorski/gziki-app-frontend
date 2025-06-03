@@ -33,6 +33,7 @@ const SocketHandler = () => {
       // sync dog changes to user dogs
       const userDogIds = user.dogs.flatMap(({ _id }) => _id);
       const userDogs = received.filter(({ _id }) => userDogIds.includes(_id));
+      console.log("userDogs => ", userDogs);
       setUserDogs(userDogs);
     });
 
