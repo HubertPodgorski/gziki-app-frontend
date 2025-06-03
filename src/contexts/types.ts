@@ -37,4 +37,6 @@ export interface AppContextType {
   setSubscriptionDetails: Dispatch<SetStateAction<Subscription | undefined>>;
   settings: Settings | undefined;
   setSettings: Dispatch<SetStateAction<Settings | undefined>>;
+  dogNoteEditingDog?: Dog;
+  setDogNoteEditingDog: Dispatch<SetStateAction<Dog | undefined>>;
 }

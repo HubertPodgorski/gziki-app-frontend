@@ -8,7 +8,6 @@ export const AppContext = createContext<Partial<AppContextType>>({
   users: [],
   dogTasks: [],
   eventTemplates: [],
-  setSettings: undefined,
 });
 
 // TODO: start using reducers and actions
@@ -21,6 +20,7 @@ export const AppContextProvider = ({ children }) => {
   const [eventTemplates, setEventTemplates] = useState([]);
   const [subscriptionDetails, setSubscriptionDetails] = useState();
   const [settings, setSettings] = useState();
+  const [dogNoteEditingDog, setDogNoteEditingDog] = useState();
 
   return (
     <AppContext.Provider
@@ -41,6 +41,8 @@ export const AppContextProvider = ({ children }) => {
         setSubscriptionDetails,
         settings,
         setSettings,
+        dogNoteEditingDog,
+        setDogNoteEditingDog,
       }}
     >
       {children}

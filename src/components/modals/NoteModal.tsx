@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useMemo } from "react";
-import { Dog } from "../../helpers/types";
 import { Button, DialogActions } from "@mui/material";
 import { useSocketContext } from "../../hooks/useSocketContext";
 import { FormProvider, useForm } from "react-hook-form";
@@ -9,74 +8,75 @@ import FormTextField from "./../inputs/FormTextField.jsx";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AppContext } from "../../contexts/AppContext";
 
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  dog?: Dog;
-}
-
 interface FormData {
   note: string;
 }
 
-const NoteModal = ({ dog, open, onClose: handleOnClose }: Props) => {
+const NoteModal = () => {
   const { user } = useAuthContext();
-  const { settings } = useContext(AppContext);
+  const { settings, dogNoteEditingDog, setDogNoteEditingDog } =
+    useContext(AppContext);
   const { socket } = useSocketContext();
 
   const formMethods = useForm<FormData>({
-    defaultValues: { note: dog?.note || "" },
+    defaultValues: { note: dogNoteEditingDog?.note || "" },
   });
+
+  useEffect(() => {
+    formMethods.reset({ note: dogNoteEditingDog?.note || "" });
+  }, [dogNoteEditingDog, formMethods]);
 
   const { handleSubmit, reset } = useMemo(() => formMethods, [formMethods]);
 
   useEffect(() => {
-    if (!dog) return;
+    if (!dogNoteEditingDog) return;
 
-    reset({ note: dog.note || "" });
-  }, [dog, reset]);
+    reset({ note: dogNoteEditingDog.note || "" });
+  }, [dogNoteEditingDog, reset]);
 
   const onClose = async () => {
     await socket.emit("update_settings", { userUpdatingNotes: null });
 
-    handleOnClose();
+    setDogNoteEditingDog(undefined);
   };
 
   const onSubmit = async ({ note }) => {
-    if (!dog) return;
+    if (!dogNoteEditingDog) return;
 
-    await socket.emit("update_dog", { _id: dog._id, note: note || "" }, () =>
-      handleOnClose()
+    await socket.emit(
+      "update_dog",
+      { _id: dogNoteEditingDog._id, note: note || "" },
+      () => onClose()
     );
 
     // TODO: error handling eventually?
   };
 
   // Disabling this feature for now
-  // const onEditingStart = async () => {
-  //   if (!dog) return;
+  const onEditingStart = async () => {
+    if (!dogNoteEditingDog) return;
 
-  //   await socket.emit("update_settings", { userUpdatingNotes: user._id });
-  // };
+    await socket.emit("update_settings", { userUpdatingNotes: user._id });
+  };
 
-  // const onEditingStop = async () => {
-  //   if (!dog) return;
+  const onEditingStop = async () => {
+    if (!dogNoteEditingDog) return;
 
-  //   await socket.emit("update_settings", { userUpdatingNotes: null });
-  // };
+    await socket.emit("update_settings", { userUpdatingNotes: null });
+  };
 
-  // const isAnotherUserEditing = useMemo(
-  //   () =>
-  //     settings?.userUpdatingNotes && user._id !== settings?.userUpdatingNotes,
-  //   [settings, user]
-  // );
+  const isAnotherUserEditing = useMemo(
+    () =>
+      settings?.userUpdatingNotes && user._id !== settings?.userUpdatingNotes,
+    [settings, user]
+  );
 
   return (
     <FormProvider {...formMethods}>
       <FormModal
-        open={open}
+        open={!!dogNoteEditingDog}
         onClose={onClose}
-        title={`${dog?.name ?? "Dog"}'s notes`}
+        title={`${dogNoteEditingDog?.name ?? "Dog"}'s notes`}
       >
         <FormGrid>
           <FormTextField
@@ -84,12 +84,12 @@ const NoteModal = ({ dog, open, onClose: handleOnClose }: Props) => {
             label="Notes"
             rows={5}
             // Disabling this feature for now
-            // onFocus={onEditingStart}
-            // onBlur={onEditingStop}
-            // disabled={isAnotherUserEditing}
-            // helperText={
-            //   isAnotherUserEditing ? "Another user updating notes" : undefined
-            // }
+            onFocus={onEditingStart}
+            onBlur={onEditingStop}
+            disabled={isAnotherUserEditing}
+            helperText={
+              isAnotherUserEditing ? "Another user updating notes" : undefined
+            }
           />
 
           <DialogActions sx={{ padding: 0 }}>

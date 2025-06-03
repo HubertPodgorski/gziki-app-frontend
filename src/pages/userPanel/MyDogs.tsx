@@ -1,13 +1,14 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import NoteModal from "../../components/modals/NoteModal";
 import { Dog } from "../../helpers/types";
+import { AppContext } from "../../contexts/AppContext";
 
 const MyDogs = () => {
   const { user } = useAuthContext();
-  const [isNoteModalOpen, setIsNoteModalOpen] = useState<Dog | undefined>();
+  const { setDogNoteEditingDog } = useContext(AppContext);
 
   if (!user) return null;
 
@@ -48,18 +49,12 @@ const MyDogs = () => {
                 </Typography>
               </Box>
 
-              <IconButton onClick={() => setIsNoteModalOpen(dog)}>
+              <IconButton onClick={() => setDogNoteEditingDog(dog)}>
                 <EditNoteIcon />
               </IconButton>
             </Box>
           </Card>
         ))}
-
-      <NoteModal
-        dog={isNoteModalOpen}
-        onClose={() => setIsNoteModalOpen(undefined)}
-        open={!!isNoteModalOpen}
-      />
     </Box>
   );
 };

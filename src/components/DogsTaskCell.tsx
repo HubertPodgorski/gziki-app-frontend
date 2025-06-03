@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Chip, Typography } from "@mui/material";
 import ChipsGrid from "./ChipsGrid";
 import TaskCell from "./tasksGrid/TaskCell";
@@ -6,7 +6,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { isMyDog } from "../helpers/tasks";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { Dog, Task } from "../helpers/types";
-import NoteModal from "./modals/NoteModal";
+import { AppContext } from "../contexts/AppContext";
 
 // TODO: type me
 interface Props {
@@ -15,10 +15,9 @@ interface Props {
 }
 
 const DogsTaskCell = ({ item: { _id, dogs, description }, index }: Props) => {
-  const [isNoteModalOpen, setIsNoteModalOpen] = useState<Dog | undefined>();
-
   const isMobile = useIsMobile();
   const { user } = useAuthContext();
+  const { setDogNoteEditingDog } = useContext(AppContext);
 
   return (
     <>
@@ -37,7 +36,7 @@ const DogsTaskCell = ({ item: { _id, dogs, description }, index }: Props) => {
                   label={`${name}`}
                   key={_id}
                   color={isMyDog(_id, user.dogs) ? "success" : "default"}
-                  onClick={() => setIsNoteModalOpen(dog)}
+                  onClick={() => setDogNoteEditingDog(dog)}
                 />
               );
             })}
@@ -46,12 +45,6 @@ const DogsTaskCell = ({ item: { _id, dogs, description }, index }: Props) => {
 
         {dogs.length === 0 && <Typography>No dogs selected</Typography>}
       </TaskCell>
-
-      <NoteModal
-        dog={isNoteModalOpen}
-        onClose={() => setIsNoteModalOpen(undefined)}
-        open={!!isNoteModalOpen}
-      />
     </>
   );
 };
