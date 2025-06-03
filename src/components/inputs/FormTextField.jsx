@@ -9,6 +9,9 @@ const FormTextField = ({
   type,
   rules = {},
   rows = 1,
+  onFocus,
+  onBlur,
+  helperText = "",
 }) => {
   const { control } = useFormContext();
 
@@ -19,13 +22,15 @@ const FormTextField = ({
       rules={{ required, ...rules }}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
+          onFocus={onFocus}
+          onBlur={onBlur}
           onChange={onChange}
           value={value}
           label={label}
           required={required}
           type={type}
           error={!!error}
-          helperText={error?.message ?? ""}
+          helperText={helperText ?? error?.message ?? ""}
           multiline={rows > 1}
           rows={rows}
         />

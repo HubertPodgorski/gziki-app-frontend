@@ -73,3 +73,8 @@ export interface Subscription {
   team: string;
   userId: string;
 }
+
+export interface Settings {
+  team: string;
+  userUpdatingNotes?: string | null;
+}

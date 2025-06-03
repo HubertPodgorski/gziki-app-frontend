@@ -14,6 +14,7 @@ const SocketHandler = () => {
     setDogTasks,
     setEventTemplates,
     setSubscriptionDetails,
+    setSettings,
   } = useContext(AppContext);
   const { user, setUserDogs } = useAuthContext();
 
@@ -47,6 +48,10 @@ const SocketHandler = () => {
       setEventTemplates(received);
     });
 
+    socket.on("settings_updated", (received) => {
+      setSettings(received);
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -63,12 +68,17 @@ const SocketHandler = () => {
       setUsers([]);
       setDogTasks([]);
       setEventTemplates([]);
+      setSettings(undefined);
 
       return;
     }
 
     socket.emit("get_all_dogs", (dogs) => {
       setDogs(dogs);
+    });
+
+    socket.emit("get_settings", (settings) => {
+      setSettings(settings);
     });
 
     socket.emit("get_all_events", (events) => {
