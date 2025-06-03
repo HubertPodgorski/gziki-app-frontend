@@ -69,6 +69,14 @@ const BottomNavBar = () => {
           <CalendarMonthIcon /> <ListItemText primary="Calendar" />
         </MenuListItemStyled>
 
+        <MenuListItemStyled
+          onClick={() => {
+            navigate(userRoutes.myDogs);
+          }}
+        >
+          <PetsIcon /> <ListItemText primary="My Dogs" />
+        </MenuListItemStyled>
+
         {isAdmin && (
           <>
             <Divider />

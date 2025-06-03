@@ -20,7 +20,7 @@ interface FormData {
 const NoteModal = ({ dog, open, onClose }: Props) => {
   const { socket } = useSocketContext();
 
-  const formMethods = useForm({
+  const formMethods = useForm<FormData>({
     defaultValues: { note: dog?.note || "" },
   });
 
@@ -30,7 +30,7 @@ const NoteModal = ({ dog, open, onClose }: Props) => {
     if (!dog) return;
 
     reset({ note: dog.note || "" });
-  }, [dog]);
+  }, [dog, reset]);
 
   const onSubmit = async ({ note }) => {
     if (!dog) return;

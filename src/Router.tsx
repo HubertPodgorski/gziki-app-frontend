@@ -21,6 +21,7 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import { useIsAdmin } from "./hooks/useIsAdmin";
 import DogTasks from "./pages/adminPanel/DogTasks";
 import EventTemplates from "./pages/adminPanel/EventTemplates";
+import MyDogs from "./pages/userPanel/MyDogs";
 
 const Router = () => {
   const { user } = useAuthContext();
@@ -30,6 +31,7 @@ const Router = () => {
 
   useEffect(() => {
     localStorage.setItem("initial-location", JSON.stringify(location));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -41,6 +43,8 @@ const Router = () => {
 
             <Route path={userPaths.tasks} element={<Tasks />} />
             <Route path={userPaths.calendar} element={<Calendar />} />
+
+            <Route path={userPaths.myDogs} element={<MyDogs />} />
           </Route>
 
           {isAdmin && (

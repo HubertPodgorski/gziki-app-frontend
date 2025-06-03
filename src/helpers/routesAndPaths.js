@@ -7,12 +7,14 @@ export const userRoutes = {
   main: "/user-panel",
   tasks: "/user-panel/tasks",
   calendar: "/user-panel/calendar",
+  myDogs: "/user-panel/my-dogs",
 };
 
 export const userPaths = {
   root: "/user-panel",
   tasks: "tasks",
   calendar: "calendar",
+  myDogs: "my-dogs",
 };
 
 export const adminRoutes = {
