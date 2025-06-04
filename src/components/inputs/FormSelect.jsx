@@ -30,8 +30,8 @@ const FormSelect = ({
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">{label}</InputLabel>
           <Select
-            onChange={onChange ? onChange : formOnChange}
-            value={value ? value : formValue}
+            onChange={onChange || formOnChange}
+            value={value || formValue}
             label={label}
             multiple={multi}
             defaultValue={formValue}

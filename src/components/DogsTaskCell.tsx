@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Chip, Typography } from "@mui/material";
 import ChipsGrid from "./ChipsGrid";
 import TaskCell from "./tasksGrid/TaskCell";
