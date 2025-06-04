@@ -1,12 +1,23 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { AppContext } from "../../contexts/AppContext";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import CrossPassModal from "../../components/modals/CrossPassModal";
+import { CrossPass } from "../../helpers/types";
+import { DataGrid } from "@mui/x-data-grid";
 
 const MyDogs = () => {
   const { user } = useAuthContext();
-  const { dogs, setDogNoteEditingDog } = useContext(AppContext);
+  const { dogs, setDogNoteEditingDog, crossPasses } = useContext(AppContext);
+  const [crossPassForDogId, setCrossPassForDogId] = useState<
+    string | undefined
+  >();
+  const [editingCrossPass, setEditingCrossPass] = useState<
+    CrossPass | undefined
+  >();
 
   const [userDogs, setUserDogs] = useState(user?.dogs || []);
 
@@ -26,7 +37,11 @@ const MyDogs = () => {
     );
   }, [user, dogs]);
 
-  console.log("user => ", user);
+  const getCrossPassesForDog = useCallback(
+    (givenDogId: string): CrossPass[] =>
+      crossPasses.filter(({ dogId }) => dogId === givenDogId),
+    [crossPasses]
+  );
 
   if (!user) return null;
 
@@ -38,7 +53,7 @@ const MyDogs = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 1,
+            gap: 2,
             padding: 1,
           }}
         >
@@ -61,8 +76,68 @@ const MyDogs = () => {
               <EditNoteIcon />
             </IconButton>
           </Box>
+
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <Typography variant="caption">Cross Passes</Typography>
+
+            <DataGrid
+              rows={getCrossPassesForDog(dog._id)}
+              getRowId={(row) => row._id}
+              columns={[
+                {
+                  headerName: "Running on",
+                  field: "runningOnLights",
+                  flex: 1,
+                  valueGetter: (_, { runningOnLights, runningOnDog }) =>
+                    runningOnLights ? "Lights" : runningOnDog?.name,
+                },
+                {
+                  headerName: "Starting position",
+                  field: "startingPosition",
+                  flex: 1,
+                },
+                {
+                  headerName: "Notes",
+                  field: "note",
+                  flex: 1,
+                },
+                {
+                  headerName: "Actions",
+                  field: "actions",
+                  sortable: false,
+                  renderCell: ({ row }) => (
+                    <IconButton
+                      onClick={() => {
+                        setEditingCrossPass(row);
+                        setCrossPassForDogId(dog._id);
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  ),
+                },
+              ]}
+              disableRowSelectionOnClick
+              hideFooter
+              disableColumnMenu
+            />
+
+            <IconButton
+              onClick={() => setCrossPassForDogId(dog._id)}
+              sx={{ alignSelf: "flex-end" }}
+            >
+              <AddIcon />
+            </IconButton>
+          </Box>
         </Card>
       ))}
+
+      <CrossPassModal
+        dogId={crossPassForDogId}
+        onClose={() => setCrossPassForDogId(undefined)}
+        open={!!crossPassForDogId}
+        crossPass={editingCrossPass}
+      />
     </Box>
   );
 };

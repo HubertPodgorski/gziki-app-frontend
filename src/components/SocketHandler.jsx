@@ -14,6 +14,7 @@ const SocketHandler = () => {
     setDogTasks,
     setEventTemplates,
     setSubscriptionDetails,
+    setCrossPasses,
     setSettings,
   } = useContext(AppContext);
   const { user, setUserDogs } = useAuthContext();
@@ -21,6 +22,10 @@ const SocketHandler = () => {
   useEffect(() => {
     socket.on("tasks_updated", (received) => {
       setTasks(received);
+    });
+
+    socket.on("cross_passes_updated", (received) => {
+      setCrossPasses(received);
     });
 
     socket.on("users_updated", (received) => {
@@ -33,7 +38,7 @@ const SocketHandler = () => {
       // sync dog changes to user dogs
       const userDogIds = user.dogs.flatMap(({ _id }) => _id);
       const userDogs = received.filter(({ _id }) => userDogIds.includes(_id));
-      console.log("userDogs => ", userDogs);
+
       setUserDogs(userDogs);
     });
 
@@ -70,12 +75,17 @@ const SocketHandler = () => {
       setDogTasks([]);
       setEventTemplates([]);
       setSettings(undefined);
+      setCrossPasses([]);
 
       return;
     }
 
     socket.emit("get_all_dogs", (dogs) => {
       setDogs(dogs);
+    });
+
+    socket.emit("get_all_cross_passes", (crossPasses) => {
+      setCrossPasses(crossPasses);
     });
 
     socket.emit("get_settings", (settings) => {
