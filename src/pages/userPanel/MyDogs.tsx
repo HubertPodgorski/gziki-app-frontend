@@ -162,7 +162,10 @@ const MyDogs = () => {
 
       <CrossPassModal
         dogId={crossPassForDogId}
-        onClose={() => setCrossPassForDogId(undefined)}
+        onClose={() => {
+          setCrossPassForDogId(undefined);
+          setEditingCrossPass(undefined);
+        }}
         open={!!crossPassForDogId}
         crossPass={editingCrossPass}
       />
