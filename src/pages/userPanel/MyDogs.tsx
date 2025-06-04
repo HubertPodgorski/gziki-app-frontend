@@ -1,25 +1,31 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useConfirmModal } from "../../hooks/useConfirmModal";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { AppContext } from "../../contexts/AppContext";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import CrossPassModal from "../../components/modals/CrossPassModal";
 import { CrossPass } from "../../helpers/types";
 import { DataGrid } from "@mui/x-data-grid";
+import { useSocketContext } from "../../hooks/useSocketContext";
 
 const MyDogs = () => {
   const { user } = useAuthContext();
   const { dogs, setDogNoteEditingDog, crossPasses } = useContext(AppContext);
+  const { socket } = useSocketContext();
+
   const [crossPassForDogId, setCrossPassForDogId] = useState<
     string | undefined
   >();
   const [editingCrossPass, setEditingCrossPass] = useState<
     CrossPass | undefined
   >();
-
   const [userDogs, setUserDogs] = useState(user?.dogs || []);
+
+  const confirm = useConfirmModal();
 
   useEffect(() => {
     const userDogIds = user.dogs.flatMap(({ _id }) => _id);
@@ -42,6 +48,16 @@ const MyDogs = () => {
       crossPasses.filter(({ dogId }) => dogId === givenDogId),
     [crossPasses]
   );
+
+  const onDeleteCrossPass = async (crossPassId: string) => {
+    try {
+      await confirm();
+    } catch (e) {
+      return;
+    }
+
+    socket.emit("delete_cross_pass", { _id: crossPassId });
+  };
 
   if (!user) return null;
 
@@ -106,14 +122,26 @@ const MyDogs = () => {
                   field: "actions",
                   sortable: false,
                   renderCell: ({ row }) => (
-                    <IconButton
-                      onClick={() => {
-                        setEditingCrossPass(row);
-                        setCrossPassForDogId(dog._id);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+
+                          onDeleteCrossPass(row._id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+
+                      <IconButton
+                        onClick={() => {
+                          setEditingCrossPass(row);
+                          setCrossPassForDogId(dog._id);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Box>
                   ),
                 },
               ]}
